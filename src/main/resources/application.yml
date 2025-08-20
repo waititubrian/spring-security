@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: spring-security
+
+  datasource:
+    url: jdbc:postgresql://localhost:5332/jwt_security
+    driver-class-name: org.postgresql.Driver
+    username: briancode
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: 'true'
+    properties:
+      hibernate:
+        format_sql: 'true'
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  secret: "7JehxV8oelbjEh08xePvEcqOJm5B0YOk"
