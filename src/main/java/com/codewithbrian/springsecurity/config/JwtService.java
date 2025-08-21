@@ -20,23 +20,7 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secret;
 
-    // 1. Token Generation Methods
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
-    }
-
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return Jwts
-                .builder()
-                .claims(extraClaims)
-                .subject(userDetails.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 hours
-                .signWith(getSignInKey())
-                .compact();
-    }
-
-    // 2. Core JWT Processing Methods
+    // 1. Core JWT Processing Methods
     private SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         return Keys.hmacShaKeyFor(keyBytes);
@@ -54,6 +38,22 @@ public class JwtService {
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
         final Claims claims = extactAllClaims(token);
         return claimsResolver.apply(claims);
+    }
+
+    // 2. Token Generation Methods
+    public String generateToken(UserDetails userDetails) {
+        return generateToken(new HashMap<>(), userDetails);
+    }
+
+    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        return Jwts
+                .builder()
+                .claims(extraClaims)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 hours
+                .signWith(getSignInKey())
+                .compact();
     }
 
     // 3. Specific Claim Extraction Methods
